@@ -19,7 +19,12 @@ jobs:
         repository: streamsets/datacollector-api
         path: ./datacollector-api
         ref: 3.14
-  
+    - name: Checkout datacollector-api repo
+      uses: actions/checkout@v2
+      with:
+        repository: streamsets/datacollector-plugin-api
+        path: ./datacollector-plugin-api
+        ref: 3.14  
       
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
@@ -35,7 +40,9 @@ jobs:
     - name: Build streamsets datacollector-api
       run: mvn clean install -DskipTests
       working-directory: ./datacollector-api
-        
+    - name: Build streamsets datacollector-plugin-api
+      run: mvn clean install -DskipTests
+      working-directory: ./datacollector-plugin-api       
     - uses: actions/checkout@v2.0.0
             
     - name: Set vars
