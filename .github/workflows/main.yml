@@ -18,6 +18,7 @@ jobs:
       with:
         repository: streamsets/datacollector-api
         path: ./datacollector-api
+        ref: 3.14
   
       
     - name: Set up JDK 1.8
