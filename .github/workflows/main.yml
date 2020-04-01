@@ -38,7 +38,7 @@ jobs:
       run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\/v/}
     
     - name: Build streamsets datacollector
-      run: mvn clean install -DskipTests -Dlicense.skip
+      run: mvn clean install -DskipTests -Dlicense.skip=true
         
     - name: Create Release
       id: create_release
