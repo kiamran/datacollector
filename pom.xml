@@ -289,6 +289,7 @@
         <version>${rat-plugin.version}</version>
         <configuration>
           <excludeSubProjects>false</excludeSubProjects>
+          <skip>true</skip>
           <excludes>
             <exclude>CHANGES.txt</exclude>
             <!-- Eclipse -->
