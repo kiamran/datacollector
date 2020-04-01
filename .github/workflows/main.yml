@@ -4,6 +4,8 @@ on:
   push:
     tags:
     - '*'
+    branches:    
+    - 3.14-kafka-consumer-patch
 
 jobs:
   build:
@@ -36,7 +38,7 @@ jobs:
       run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\/v/}
     
     - name: Build streamsets datacollector
-      run: mvn clean install -DskipTests -Drat.skip=true
+      run: mvn clean install -DskipTests -Dlicense.skip
         
     - name: Create Release
       id: create_release
