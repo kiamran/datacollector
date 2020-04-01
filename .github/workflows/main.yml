@@ -13,11 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Streamsets
-      uses: actions/checkout@v2.0.0
+    - name: Checkout datacollector-api repo
+      uses: actions/checkout@v2
       with:
         repository: streamsets/datacollector-api
-        ref: 3.14.0
+        path: ./datacollector-api
+  
     - uses: actions/cache@v1
       with:
         path: ~/.m2/repository
@@ -30,6 +31,7 @@ jobs:
     
     - name: Build streamsets datacollector-api
       run: mvn clean install -DskipTests
+      working-directory: ./datacollector-api
         
     - uses: actions/checkout@v2.0.0
             
