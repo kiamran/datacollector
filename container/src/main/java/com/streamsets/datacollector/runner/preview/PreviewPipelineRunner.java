@@ -67,6 +67,7 @@ import com.streamsets.pipeline.api.StageType;
 import com.streamsets.pipeline.api.impl.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -132,6 +133,7 @@ public class PreviewPipelineRunner implements PipelineRunner, PushSourceContextD
     processingTimer = MetricsConfigurator.createTimer(metrics, "pipeline.batchProcessing", name, rev);
     batchesOutput = Collections.synchronizedList(new ArrayList<>());
     this.reportedErrors = new HashMap<>();
+    MDC.put("skipTargets",Boolean.toString(skipTargets));
   }
 
   @Override
