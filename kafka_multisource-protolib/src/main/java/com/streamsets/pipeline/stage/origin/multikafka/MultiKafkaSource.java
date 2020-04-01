@@ -40,25 +40,20 @@ import com.streamsets.pipeline.stage.common.DefaultErrorRecordHandler;
 import com.streamsets.pipeline.stage.common.ErrorRecordHandler;
 import com.streamsets.pipeline.stage.common.HeaderAttributeConstants;
 import com.streamsets.pipeline.stage.origin.multikafka.loader.KafkaConsumerLoader;
-
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MultiKafkaSource extends BasePushSource {
@@ -74,9 +69,12 @@ public class MultiKafkaSource extends BasePushSource {
   private DataParserFactory parserFactory;
   private ExecutorService executor;
 
+  private Boolean skipTargets;
+
   public MultiKafkaSource(MultiKafkaBeanConfig conf) {
     this.conf = conf;
     batchSize = conf.maxBatchSize;
+    skipTargets = Boolean.valueOf(MDC.get("skipTargets"));
   }
 
   public class MultiTopicCallable implements Callable<Long> {
@@ -193,6 +191,12 @@ public class MultiKafkaSource extends BasePushSource {
 
 
     private void commitSyncAndProcess(BatchContext batchContext) {
+      LOG.info("is preview:{}  is skipTargets:{}", getContext().isPreview(), BooleanUtils.isTrue(skipTargets));
+      if (getContext().isPreview() && BooleanUtils.isTrue(skipTargets)) {
+        getContext().processBatch(batchContext);
+        return;
+      }
+
       if (getContext().getDeliveryGuarantee() == DeliveryGuarantee.AT_MOST_ONCE) {
         consumer.commitSync();
       }
