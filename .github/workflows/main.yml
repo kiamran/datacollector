@@ -31,9 +31,7 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
+        key: ${{ runner.os }}-maven
               
     - name: Build streamsets datacollector-api
       run: mvn clean install -DskipTests
@@ -49,9 +47,7 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-    
+        key: ${{ runner.os }}-maven
     - name: Build streamsets datacollector
       run: mvn clean install -DskipTests -Dlicense.skip=true
         
