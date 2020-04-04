@@ -44,10 +44,7 @@ jobs:
     - name: Set vars
       id: vars
       run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\/v/}
-    - uses: actions/cache@v1
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven
+
     - name: Build streamsets datacollector
       run: mvn clean install -DskipTests -Dlicense.skip=true
         
