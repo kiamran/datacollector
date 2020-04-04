@@ -4,8 +4,6 @@ on:
   push:
     tags:
     - '*'
-    branches:    
-    - 3.14-kafka-consumer-patch
 
 jobs:
   build:
@@ -67,7 +65,10 @@ jobs:
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
-    
+
+    - name: Zip required files
+      run: zip release.zip  container/target/streamsets-datacollector-container*-SNAPSHOT.jar kafka_multisource-protolib/target/streamsets-datacollector-kafka_multisource-protolib-*-SNAPSHOT.jar
+
     - name: Upload Release Asset
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1.0.1
@@ -75,6 +76,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: container/target/streamsets-datacollector-container-*.jar
-        asset_name: streamsets-datacollector-container.jar
+        asset_path: release.zip
+        asset_name: release.zip
         asset_content_type: application/java-archive
