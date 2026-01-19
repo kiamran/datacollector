@@ -39,6 +39,7 @@ The job collecting the metric has a non-default name.
 |--------------------|----------------------|
 | kube-state-metrics | `kube-state-metrics` |
 | kubelet            | `kubelet`            |
+| node-exporter      | `node-exporter`      |
 
 **Solution:** Check actual job names in Prometheus:
 ```promql
@@ -65,8 +66,14 @@ kube_node_labels{<your_filter>}
 
 By default, the agent validates that required metrics return data. The following metrics are required:
 
-- `node_labels` - Node label information from kube-state-metrics
-- `pod_labels` - Pod label information from kube-state-metrics
+- `node_labels`
+  ```promql
+  avg_over_time(kube_node_labels{node!='' ...}[...])
+  ```
+- `pod_labels`
+  ```promql
+  avg_over_time(kube_pod_labels{namespace!='',pod!='' ...}[...])
+  ```
 
 If these return empty while other queries succeed, the agent will fail with `NoMetricDataException`.
 
