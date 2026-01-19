@@ -34,11 +34,11 @@ If missing, ensure `kube-state-metrics` and `kubelet` are properly configured an
 The job collecting the metric has a non-default name.
 
 **Default job names:**
-| Component | Default Name |
-|-----------|--------------|
+
+| Component          | Default Name         |
+|--------------------|----------------------|
 | kube-state-metrics | `kube-state-metrics` |
-| kubelet | `kubelet` |
-| node-exporter | `node-exporter` |
+| kubelet            | `kubelet`            |
 
 **Solution:** Check actual job names in Prometheus:
 ```promql
